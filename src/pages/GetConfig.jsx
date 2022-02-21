@@ -19,6 +19,7 @@ function GetConfig(props) {
                 "port1": data?.port1,
                 "port2": data?.port2,
                 "key": data?.machineKey,
+                "username": data?.username,
             }),
         })
         .then(response => response.json())
@@ -85,7 +86,12 @@ function GetConfig(props) {
                 <div>
                     <label>Key</label>
                     <input {...register("machineKey", { required: true })} />
-                    {errors.machineKey && <span>This field is required</span>}
+                    {errors.machineKey && <span style={{color: 'red'}}>This field is required</span>}
+                </div>
+                <div>
+                    <label>Username</label>
+                    <input {...register("username", { required: true })} />
+                    {errors.username && <span style={{color: 'red'}}>This field is required</span>}
                 </div>
                 <input type="submit" />
             </form>
