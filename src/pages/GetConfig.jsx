@@ -1,11 +1,14 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import { useForm } from 'react-hook-form';
 import { Link } from 'react-router-dom';
+import { AccountContext } from '../components/Account';
 
 function GetConfig(props) {
     const [portList, setPortList] = useState([]);
     const [configKey, setConfigKey] = useState('');
     const [loading, setLoading] = useState(false);
+    const { user } = useContext(AccountContext);
+    console.log(user);
     const { register, handleSubmit, watch, formState: { errors } } = useForm();
     const onSubmit = data => {
         setLoading(true)
@@ -20,6 +23,7 @@ function GetConfig(props) {
                 "port2": data?.port2,
                 "key": data?.machineKey,
                 "username": data?.username,
+                "admin": user?.email,
             }),
         })
         .then(response => response.json())
