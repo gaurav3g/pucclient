@@ -10,7 +10,6 @@ function RequireAuth({ children }) {
 
     useEffect(() => {
       getSession().then((session) => {
-        console.log("Session: ", session);
         setStatus(true);
       })
     }, []);

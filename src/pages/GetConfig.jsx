@@ -7,16 +7,16 @@ function GetConfig(props) {
     const [portList, setPortList] = useState([]);
     const [configKey, setConfigKey] = useState('');
     const [loading, setLoading] = useState(false);
-    const { user } = useContext(AccountContext);
-    console.log(user);
-    const { register, handleSubmit, watch, formState: { errors } } = useForm();
+    const { user, idToken } = useContext(AccountContext);
+
+    const { register, handleSubmit, formState: { errors } } = useForm();
     const onSubmit = data => {
         setLoading(true)
         fetch("https://xjoexzabe3.execute-api.ap-south-1.amazonaws.com/stage/user/register", {
             method: 'POST',
             headers: {
                 "Content-Type": "application/json",
-                'authtoken': 'helloworld',
+                'Authorization': idToken,
             },
             body: JSON.stringify({
                 "port1": data?.port1,
@@ -42,7 +42,7 @@ function GetConfig(props) {
             method: 'GET',
             headers: {
                 "Content-Type": "application/json",
-                'authtoken': 'helloworld',
+                'Authorization': idToken,
             },
         })
         .then(response => response.json())
@@ -54,6 +54,8 @@ function GetConfig(props) {
     return (
         /* "handleSubmit" will validate your inputs before invoking "onSubmit" */
         <>
+            <Link to='/client' style={{fontSize: 12}}>go to new version</Link>
+            <hr />
             <form onSubmit={handleSubmit(onSubmit)}>
                 <div>
                     <label>Port 1: </label>
