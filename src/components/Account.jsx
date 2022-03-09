@@ -8,6 +8,9 @@ const nameToValurMap = list => list?.reduce((a,c) => ({...a, [c?.Name]: c?.Value
 
 const Account = (props) => {
   const [userData, setUserData] = useState({});
+  const [idToken, setIdToken] = useState(null);
+  const [clientList, setClientList] = useState({});
+
   const getSession = async () => {
     return await new Promise((resolve, reject) => {
       const user = Pool.getCurrentUser();
@@ -17,6 +20,7 @@ const Account = (props) => {
             reject();
           } else {
             resolve(session);
+            setIdToken(session?.idToken?.jwtToken || null);
             user.getUserData((err, data) => {
                 if (err) {
                     reject();
@@ -63,7 +67,15 @@ const Account = (props) => {
   };
 
   return (
-    <AccountContext.Provider value={{ authenticate, getSession, logout, user: userData }}>
+    <AccountContext.Provider value={{
+        authenticate,
+        getSession,
+        logout,
+        user: userData,
+        idToken,
+        clientList,
+        setClientList: newObj => setClientList(prev => ({...prev, ...newObj})),
+    }}>
       {props.children}
     </AccountContext.Provider>
   );
