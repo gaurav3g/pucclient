@@ -47,8 +47,8 @@ function App() {
             </RequireAuth>
           } />
         </Routes>
-      </div> */}
-      Blocked due to server payment! Sorry for the inconvenience...
+      </div>
+      {/* Blocked due to server payment! Sorry for the inconvenience... */}
     </div>
   );
 }
