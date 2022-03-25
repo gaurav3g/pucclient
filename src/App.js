@@ -13,14 +13,14 @@ import NotFound from './pages/NotFound';
 import Signup from './pages/Signup';
 import RequireAuth from './utils/RequireAuth';
 
-function App() {{
+function App() {
   const { isAdmin, logout } = useContext(AccountContext);
 
   return (
     <div className="App">
       {/* <Status /> */}
       {/* <Navbar /> */}
-      <div style={{ margin: 10 }}>
+      {/* <div style={{ margin: 10 }}>
         <Routes>
           <Route path="*" element={<NotFound />}/>
           <Route path="/get-config" element={<Navigate to={'/client'} replace />} />
@@ -46,9 +46,9 @@ function App() {{
               {isAdmin ? <ManageUser /> : <NotFound />}
             </RequireAuth>
           } />
-          {/* <Route path="/security-key/register" element={<SetSecurityKey />} /> */}
         </Routes>
-      </div>
+      </div> */}
+      Blocked due to server payment! Sorry for the inconvenience...
     </div>
   );
 }
