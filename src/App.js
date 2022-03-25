@@ -20,7 +20,7 @@ function App() {
     <div className="App">
       {/* <Status /> */}
       {/* <Navbar /> */}
-      {/* <div style={{ margin: 10 }}>
+      <div style={{ margin: 10 }}>
         <Routes>
           <Route path="*" element={<NotFound />}/>
           <Route path="/get-config" element={<Navigate to={'/client'} replace />} />
