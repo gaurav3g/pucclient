@@ -16,7 +16,6 @@ import RequireAuth from './utils/RequireAuth';
 function App() {
   const { isAdmin, logout } = useContext(AccountContext);
   const [isPaid, setPaid] = useState(false);
-
   return !isPaid ? (
     <div className="App" style={{display: 'flex', flexDirection: 'column', justifyContent: 'center', width: "100%", top: 0, bottom: 0, position: 'absolute'}}>
       <div style={{margin: 'auto'}}>
