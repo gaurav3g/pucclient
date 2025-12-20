@@ -12,7 +12,7 @@ function SetSecurityKey(props) {
         if('geolocation' in navigator){
             navigator.geolocation.getCurrentPosition(
                 (position) => {
-                    fetch("https://xjoexzabe3.execute-api.ap-south-1.amazonaws.com/stage/v2/security-key/request", {
+                    fetch("/stage/v2/security-key/request", {
                         method: 'POST',
                         headers: {
                             "Content-Type": "application/json",

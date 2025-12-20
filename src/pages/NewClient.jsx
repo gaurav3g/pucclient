@@ -13,7 +13,7 @@ function NewClient() {
 
     const onSubmit = data => {
         setLoading(true)
-        fetch("https://xjoexzabe3.execute-api.ap-south-1.amazonaws.com/stage/v2/client/register", {
+        fetch("/stage/v2/client/register", {
             method: 'POST',
             headers: {
                 "Content-Type": "application/json",

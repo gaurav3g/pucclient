@@ -8,7 +8,7 @@ function ManageUser(props) {
     const { idToken, accessToken } = useContext(AccountContext);
 
     const onSubmit = ({email}) => {
-        fetch("https://xjoexzabe3.execute-api.ap-south-1.amazonaws.com/stage/v2/admin/reset-user", {
+        fetch("/stage/v2/admin/reset-user", {
             method: 'POST',
             headers: {
                 "Content-Type": "application/json",

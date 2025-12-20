@@ -13,7 +13,7 @@ function GetConfig(props) {
     const { register, handleSubmit, formState: { errors } } = useForm();
     const onSubmit = data => {
         setLoading(true)
-        fetch("https://xjoexzabe3.execute-api.ap-south-1.amazonaws.com/stage/user/register", {
+        fetch("/stage/user/register", {
             method: 'POST',
             headers: {
                 "Content-Type": "application/json",
@@ -39,7 +39,7 @@ function GetConfig(props) {
     const copyHandler = () => navigator.clipboard.writeText(configKey)
 
     useEffect(()=>{
-        fetch("https://xjoexzabe3.execute-api.ap-south-1.amazonaws.com/stage/get-port",{
+        fetch("/stage/get-port",{
             method: 'GET',
             headers: {
                 "Content-Type": "application/json",

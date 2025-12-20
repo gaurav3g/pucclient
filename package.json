@@ -22,7 +22,9 @@
     "react-router-dom": "^6.2.1",
     "react-scripts": "5.0.0",
     "systeminformation": "^5.11.6",
-    "web-vitals": "^2.1.4"
+    "web-vitals": "^2.1.4",
+    "@mui/x-date-pickers": "^5.0.0",
+    "http-proxy-middleware": "^2.0.6"
   },
   "scripts": {
     "start": "react-scripts start",
@@ -30,6 +32,7 @@
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
+  "proxy": "https://xjoexzabe3.execute-api.ap-south-1.amazonaws.com",
   "eslintConfig": {
     "extends": [
       "react-app",

@@ -5,29 +5,11 @@ import { useForm } from 'react-hook-form';
 import { Link, useParams } from 'react-router-dom';
 import { AccountContext } from '../components/Account';
 import Loader from '../components/Loader';
+import { TextField } from '@mui/material';
+import { DatePicker } from '@mui/x-date-pickers/DatePicker';
+import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
+import { AdapterMoment } from '@mui/x-date-pickers/AdapterMoment';
 
-const VALIDITY_OPTIONS = [
-    {
-        label: '10 days (trail)',
-        value: 10,
-    },
-    {
-        label: '1 month',
-        value: 30,
-    },
-    {
-        label: '3 months (quarter)',
-        value: 90,
-    },
-    {
-        label: '6 months',
-        value: 180,
-    },
-    {
-        label: '1 year',
-        value: 365,
-    },
-]
 
 function ClientDetail(props) {
     const { id } = useParams();
@@ -36,6 +18,7 @@ function ClientDetail(props) {
     const [configKey, setConfigKey] = useState('');
     const [loading, setLoading] = useState(false);
     const [expiresAt, setExpiresAt] = useState(null);
+    const [selectedDate, setSelectedDate] = useState(null);
     const { user, clientList, idToken, setClientList } = useContext(AccountContext);
 
     const { register, handleSubmit, setValue, getValues } = useForm();
@@ -44,7 +27,7 @@ function ClientDetail(props) {
 
     const onSubmit = data => {
         setLoading(true)
-        fetch("https://xjoexzabe3.execute-api.ap-south-1.amazonaws.com/stage/v2/client/update", {
+        fetch("/stage/v2/client/update", {
             method: 'POST',
             headers: {
                 "Content-Type": "application/json",
@@ -55,7 +38,7 @@ function ClientDetail(props) {
                 "port2": data?.port2,
                 "key": id,
                 "admin": user?.email,
-                "expires_at": moment().add(data?.validFor, 'days').format('YYYY-MM-DD')
+                "expires_at": selectedDate ? selectedDate.format('YYYY-MM-DD') : moment().add(30, 'days').format('YYYY-MM-DD')
             }),
         })
         .then(response => response.json())
@@ -71,7 +54,10 @@ function ClientDetail(props) {
         if(!isEmpty(clientList[id])){
             const client = clientList[id];
 
-            client?.expires_at && setExpiresAt(client?.expires_at)
+            if (client?.expires_at) {
+                setExpiresAt(client?.expires_at);
+                setSelectedDate(moment(client?.expires_at));
+            }
 
             const ports = (client?.machine_api || '5555_5555').split('_').map(it => parseInt(it));
             console.log(ports);
@@ -82,7 +68,7 @@ function ClientDetail(props) {
 
     useEffect(() => {
         if(isEmpty(clientList[id])){
-            fetch("https://xjoexzabe3.execute-api.ap-south-1.amazonaws.com/stage/v2/client/get",{
+            fetch("/stage/v2/client/get",{
                 method: 'POST',
                 headers: {
                     "Content-Type": "application/json",
@@ -104,7 +90,7 @@ function ClientDetail(props) {
     }, [])
 
     useEffect(()=>{
-        fetch("https://xjoexzabe3.execute-api.ap-south-1.amazonaws.com/stage/get-port",{
+        fetch("/stage/get-port",{
             method: 'GET',
             headers: {
                 "Content-Type": "application/json",
@@ -118,69 +104,68 @@ function ClientDetail(props) {
     }, [idToken]);
 
     return (
-        <>
-            <Link to='/client' style={{fontSize: 12}}>New Client</Link>
-            <hr />
-            <div>
-                Key: {clientList[id]?.key}
-            </div>
-            <div>
-                Name: {clientList[id]?.username}
-            </div>
-            <hr style={{margin: '12px 0'}} />
-            <form onSubmit={handleSubmit(onSubmit)}>
-                {loading && <Loader />}
+        <LocalizationProvider dateAdapter={AdapterMoment}>
+            <>
+                <Link to='/client' style={{fontSize: 12}}>New Client</Link>
+                <hr />
                 <div>
-                    <label>Port 1: </label>
-                    <select {...register("port1")}>
-                        <option
-                            label={'Select a port'}
-                            value={''}
+                    Key: {clientList[id]?.key}
+                </div>
+                <div>
+                    Name: {clientList[id]?.username}
+                </div>
+                <hr style={{margin: '12px 0'}} />
+                <form onSubmit={handleSubmit(onSubmit)}>
+                    {loading && <Loader />}
+                    <div>
+                        <label>Port 1: </label>
+                        <select {...register("port1")}>
+                            <option
+                                label={'Select a port'}
+                                value={''}
+                            />
+                            {portList.map(item => (
+                                <option
+                                    key={item.id}
+                                    label={`${item.id} (${item.port})`}
+                                    value={item.port}
+                                />
+                            ))}
+                        </select>
+                    </div>
+                    <div>
+                        <label>Port 2: </label>
+                        <select {...register("port2")}>
+                            <option
+                                label={'Select a port'}
+                                value={''}
+                            />
+                            {portList.map(item => (
+                                <option
+                                    key={item.id}
+                                    label={`${item.id} (${item.port})`}
+                                    value={item.port}
+                                />
+                            ))}
+                        </select>
+                    </div>
+                    <div>
+                        <label>Expiration Date: </label>
+                        <DatePicker
+                            value={selectedDate}
+                            onChange={(newValue) => {
+                                setSelectedDate(newValue);
+                                setExpiresAt(newValue?.format('YYYY-MM-DD'));
+                            }}
+                            renderInput={(params) => <TextField {...params} size="small" />}
+                            minDate={moment()}
                         />
-                        {portList.map(item => (
-                            <option
-                                key={item.id}
-                                label={`${item.id} (${item.port})`}
-                                value={item.port}
-                            />
-                        ))}
-                    </select>
-                </div>
-                <div>
-                    <label>Port 2: </label>
-                    <select {...register("port2")}>
-                        <option
-                            label={'Select a port'}
-                            value={''}
-                        />
-                        {portList.map(item => (
-                            <option
-                                key={item.id}
-                                label={`${item.id} (${item.port})`}
-                                value={item.port}
-                            />
-                        ))}
-                    </select>
-                </div>
-                <div>
-                <label>Valid for: </label>
-                    <select {...register("validFor", {
-                        onChange: (e) => setExpiresAt(moment().add(e.target.value, 'days').format('YYYY-MM-DD'))
-                    })}>
-                        {VALIDITY_OPTIONS.map(item => (
-                            <option
-                                key={item.value}
-                                label={item.label}
-                                value={item.value}
-                            />
-                        ))}
-                    </select>
-                </div>
-                <div style={{color: "#aaa"}}>
-                    <label>Expires At: </label> {moment(expiresAt).format("DD MMM, YYYY")}
-                </div>
-                <button type='submit'>Update</button>
-            </form>
+                    </div>
+                    <div style={{color: "#aaa", marginTop: '8px'}}>
+                        <label>Expires At: </label> {selectedDate ? selectedDate.format("DD MMM, YYYY") : 'Not selected'}
+                    </div>
+                    <button type='submit'>Update</button>
+                </form>
             {!isEmpty(configKey) &&
                 (<>
                     <hr />
@@ -190,7 +175,8 @@ function ClientDetail(props) {
                     <button onClick={copyHandler}>Copy to Clipboard</button>
                 </>)
             }
-        </>
+            </>
+        </LocalizationProvider>
     );
 }
 
