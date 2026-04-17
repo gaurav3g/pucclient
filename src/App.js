@@ -17,10 +17,10 @@ import RequireAuth from './utils/RequireAuth';
 
 function App() {
   const { isAdmin, logout } = useContext(AccountContext);
-  const [isPaid, setPaid] = useState(false);
+  const [isPaid, setPaid] = useState(true);
   return !isPaid ? (
-    <div className="App" style={{display: 'flex', flexDirection: 'column', justifyContent: 'center', width: "100%", top: 0, bottom: 0, position: 'absolute'}}>
-      <div style={{margin: 'auto'}}>
+    <div className="App" style={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', width: "100%", top: 0, bottom: 0, position: 'absolute' }}>
+      <div style={{ margin: 'auto' }}>
         <h1>
           <span >This site can't be reached</span>
         </h1>
@@ -46,7 +46,7 @@ function App() {
   ) : (
     <div className="App">
       <Routes>
-        <Route path="*" element={<NotFound />}/>
+        <Route path="*" element={<NotFound />} />
         <Route path="/get-config" element={<Navigate to={'/client'} replace />} />
         <Route path="/" element={
           <RequireAuth>
